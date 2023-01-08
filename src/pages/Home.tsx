@@ -1,18 +1,19 @@
 import React, { memo, useRef, useState } from "react";
+import { Action } from "../components/Action";
+import { ShowTodoList } from "../components/ShowTodoList";
 import TodoItem from "../utils/TodoItem";
 type Todo = { id: number; content: string | undefined; isDone: boolean };
 
-const Home = memo(({ onClick, isDarkTheme }: any) => {
+const Home = ({ onClickForTheme, isDarkTheme }: any) => {
   const [todo, setTodo] = useState<Todo[]>([]);
-  // const [input, setInput] = useState("");
-  const inputRef = useRef<null | HTMLInputElement>(null);
 
-  console.count("App render");
+  const inputRef = useRef<null | HTMLInputElement>(null);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const currentInput = inputRef.current;
       if (currentInput) {
+        if (currentInput.value === "") return;
         setTodo([
           ...todo,
           { id: todo.length, content: currentInput?.value, isDone: false },
@@ -22,6 +23,15 @@ const Home = memo(({ onClick, isDarkTheme }: any) => {
     }
   };
 
+  const handleClickForIsDone = (event: React.MouseEvent, id: number) => {
+    setTodo(
+      [...todo].map((item) => {
+        if (item.id === id) return { ...item, isDone: !item.isDone };
+        return item;
+      })
+    );
+  };
+  console.count("Home is render");
   return (
     <div className=" max-w-[1440px]  mx-auto h-full  text-white">
       <div className="md:w-[45%] sm:w-1/2 w-3/5 mx-auto">
@@ -29,7 +39,7 @@ const Home = memo(({ onClick, isDarkTheme }: any) => {
           TODO
           <div
             className="hover:opacity-50 cursor-pointer transition-all"
-            onClick={onClick}
+            onClick={onClickForTheme}
           >
             {isDarkTheme ? (
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26">
@@ -52,11 +62,11 @@ const Home = memo(({ onClick, isDarkTheme }: any) => {
         </h1>
         <div
           className={`flex mt-10  ${
-            isDarkTheme ? "bg-slate-900" : "bg-white text-slate-900 font-bold"
-          } rounded overflow-hidden`}
+            isDarkTheme ? "bg-slate-900" : "bg-white text-slate-900 "
+          } rounded overflow-hidden font-bold`}
         >
           <div className={`h-16 w-16 flex  justify-center items-center`}>
-            <i className={`fa-regular fa-circle  text-xl opacity-25 `}></i>
+            <i className={`fa-regular  fa-circle  text-xl opacity-25 `}></i>
           </div>
 
           <input
@@ -66,22 +76,17 @@ const Home = memo(({ onClick, isDarkTheme }: any) => {
             ref={inputRef}
           />
         </div>
-
-        <div className="mt-6 w-full rounded overflow-hidden shadow-zinc-900 shadow-sm ">
-          {todo.map((item: any) => (
-            <TodoItem todo={item} key={item?.id} isDarkTheme={isDarkTheme} />
-          ))}
-          <div
-            className={`${
-              isDarkTheme ? "bg-slate-900" : "bg-white text-slate-900 font-bold"
-            } w-full h-10 flex justify-center items-center `}
-          >
-            That is not good
-          </div>
+        <div className={`mt-6 rounded`}>
+          <ShowTodoList
+            isDarkTheme={isDarkTheme}
+            handleClickForIsDone={handleClickForIsDone}
+            todo={todo}
+            setTodo={setTodo}
+          />
         </div>
       </div>
     </div>
   );
-});
+};
 
 export default Home;
