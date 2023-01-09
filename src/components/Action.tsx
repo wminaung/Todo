@@ -14,7 +14,6 @@ enum ActiveAction {
   ACTIVE = "active",
   COMPLETE = "complete",
 }
-console.log(ActiveAction);
 
 type ActionProps = {
   todo: Todo[];

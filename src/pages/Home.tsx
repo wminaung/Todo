@@ -1,7 +1,7 @@
-import React, { memo, useRef, useState } from "react";
-import { Action } from "../components/Action";
+import React, { useRef, useState } from "react";
+
 import { ShowTodoList } from "../components/ShowTodoList";
-import TodoItem from "../utils/TodoItem";
+
 type Todo = { id: number; content: string | undefined; isDone: boolean };
 
 const Home = ({ onClickForTheme, isDarkTheme }: any) => {
