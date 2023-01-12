@@ -31,9 +31,9 @@ const Home = ({ onClickForTheme, isDarkTheme }: any) => {
       })
     );
   };
-  console.count("Home is render");
+
   return (
-    <div className=" max-w-[1440px]  mx-auto h-full  text-white">
+    <div className=" max-w-[1440px]  mx-auto pb-8  text-white">
       <div className="md:w-[45%] sm:w-1/2 w-3/5 mx-auto">
         <h1 id="todo" className="text-4xl font-semibold flex justify-between ">
           TODO
@@ -84,6 +84,10 @@ const Home = ({ onClickForTheme, isDarkTheme }: any) => {
             setTodo={setTodo}
           />
         </div>
+        <div className="py-7"></div>
+      </div>
+      <div className="flex justify-center items-center text-[#4d5066] font-extrabold">
+        <span>Drag and drop to order list</span>
       </div>
     </div>
   );

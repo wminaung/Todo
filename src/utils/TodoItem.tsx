@@ -11,25 +11,38 @@ type TodoItemProps = {
   };
   onClickForDelete: (e: React.MouseEvent, id: number, isDone: boolean) => void;
 
-  setShowItems: React.Dispatch<React.SetStateAction<Todo[]>>;
-  showItems: Todo[];
-
   isDarkTheme: boolean;
   onClickForIsDone: (event: React.MouseEvent, id: number) => void;
+
+  onDragStart: (e: React.DragEvent<HTMLDivElement>, id: number) => void;
+  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrop: (e: React.DragEvent<HTMLDivElement>, id: number) => void;
 };
 
 const TodoItem = ({
   todoItem,
   isDarkTheme,
   onClickForIsDone,
-  showItems,
-  setShowItems,
+
   onClickForDelete,
+  onDragStart,
+  onDragOver,
+  onDrop,
 }: TodoItemProps) => {
   //
 
   return (
     <div
+      draggable="true"
+      onDragOver={(e) => {
+        onDragOver(e);
+      }}
+      onDragStart={(e) => {
+        onDragStart(e, todoItem.id);
+      }}
+      onDrop={(e) => {
+        onDrop(e, todoItem.id);
+      }}
       className={`flex  ${
         isDarkTheme ? "bg-slate-900" : "bg-slate-50 text-slate-900 "
       }  overflow-hidden  border-b   w-full h-16 items-center justify-between transition-all`}

@@ -24,13 +24,13 @@ function App() {
       setTheme("dark");
     }
   };
-  console.count("App is render");
+
   return (
     <div
       id="App"
       className={`App transition-all ${
         theme === "dark" ? imgUrl.darkTheme : imgUrl.lightTheme
-      }  h-screen w-full`}
+      }  min-h-screen w-full`}
     >
       <div className="pt-20 ">
         <Home

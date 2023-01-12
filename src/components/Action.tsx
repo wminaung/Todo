@@ -19,15 +19,30 @@ type ActionProps = {
   todo: Todo[];
   action: ActionMethods;
   activeAction: ActiveAction;
+  isDarkTheme: boolean;
 };
 
-export const Action = ({ todo, action, activeAction }: ActionProps) => {
+export const Action = ({
+  todo,
+  action,
+  activeAction,
+  isDarkTheme,
+}: ActionProps) => {
   return (
     <div
-      className={`flex px-5 h-full w-full justify-between items-center text-sm font-light transition-all`}
+      className={` relative flex px-2 lg:px-5 h-full w-full justify-between items-center text-sm font-light transition-all`}
     >
       <div>{todo.filter((item) => item.isDone === false).length} item left</div>
-      <ul className={`flex w-2/6 h-full justify-between items-center `}>
+      <ul
+        className={`flex   px-10   lg:w-3/6 lg:h-full lg:justify-between items-center lg:static absolute top-12 h-9  left-0 w-full  lg:border-none  lg:bg-inherit  rounded-sm justify-evenly
+        bg-slate-900 shadow-lg    lg:shadow-none
+        ${
+          isDarkTheme
+            ? "bg-slate-900  border-slate-700 border"
+            : "bg-slate-50 text-slate-900 border border-slate-300"
+        } 
+        `}
+      >
         <ActionList
           content="all"
           activeAction={activeAction}

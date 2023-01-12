@@ -15,6 +15,9 @@ export const ActionList = ({
   onClick,
   activeAction,
 }: ActionListProps) => {
+  const capitalise = (input: string) => {
+    return `${input[0].toUpperCase()}${input.slice(1).toLowerCase()}`;
+  };
   return (
     <div
       className={`${
@@ -22,7 +25,7 @@ export const ActionList = ({
       } hover:opacity-90 font-bold  opacity-40 cursor-pointer select-none`}
       onClick={onClick}
     >
-      {content}
+      {capitalise(content)}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TodoItem from "../utils/TodoItem";
 import { Action } from "./Action";
+import { v4 as uuidv4 } from "uuid";
 type Todo = { id: number; content: string | undefined; isDone: boolean };
 type ShowTodoListProps = {
   todo: Todo[];
@@ -27,8 +28,6 @@ export const ShowTodoList = ({
   useEffect(() => {
     setShowItems([...todo]);
   }, [todo]);
-
-  useEffect(() => {});
 
   const clearComplete = () => {
     if (showItems.filter((item) => item.isDone === true).length === 0) {
@@ -63,30 +62,59 @@ export const ShowTodoList = ({
     setTodo(showItems.filter((item) => item.id !== id));
   };
 
+  let dragIndex = 0;
+  let dragItem: Todo = {} as Todo;
+  let dropIndex = 0;
+  let dropItem: Todo = {} as Todo;
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
+    dragIndex = showItems.findIndex((item) => item.id === id);
+    dragItem = showItems[dragIndex];
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, id: number) => {
+    dropIndex = showItems.findIndex((item) => item.id === id);
+    dropItem = showItems[dropIndex];
+    const dnd = showItems.map((item, idx) => {
+      if (idx === dragIndex) {
+        return dropItem;
+      }
+      if (idx === dropIndex) {
+        return dragItem;
+      }
+      return item;
+    });
+    setTodo(dnd);
+  };
   return (
-    <div className="relative rounded">
-      <div className="w-full rounded [&::-webkit-scrollbar]:hidden  overflow-auto   max-h-[55vh]  shadow-zinc-900 shadow-md  transition-all">
+    <div className="relative rounded transition-all">
+      <div className="w-full rounded   shadow-zinc-900 shadow-md  transition-all">
         {showItems.map((item: any) => (
           <TodoItem
             todoItem={item}
-            key={item?.id}
+            key={uuidv4()}
             isDarkTheme={isDarkTheme}
             onClickForIsDone={handleClickForIsDone}
-            showItems={showItems}
-            setShowItems={setShowItems}
             onClickForDelete={handleClickForDelete}
+            onDragOver={handleDragOver}
+            onDragStart={handleDragStart}
+            onDrop={handleDrop}
           />
         ))}
       </div>
       <div
         className={`${
           isDarkTheme
-            ? "bg-slate-900 border-black"
-            : "bg-slate-50 text-slate-900  border-zinc-600"
-        } w-full border  h-10 z-50 flex justify-center items-center  shadow-lg absolute left-0 bottom-[-41px] rounded-b`}
+            ? "bg-slate-900 border-slate-900"
+            : "bg-slate-50 text-slate-900  "
+        }  w-full    h-10 z-50 flex justify-center items-center  shadow-lg   rounded-b`}
       >
         <Action
           todo={todo}
+          isDarkTheme={isDarkTheme}
           activeAction={activeAction}
           action={{ all, active, complete, clearComplete }}
         />
